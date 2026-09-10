@@ -1,30 +1,20 @@
 import { z } from 'zod';
 
 export const registrationSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .min(1, 'Email is required')
-    .email('Please enter a valid email address'),
-  password: z
-    .string()
-    .min(8, 'Password must be at least 8 characters')
-    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .regex(/[0-9]/, 'Password must contain at least one number'),
+  firstName: z.string().trim().min(1, 'First Name is required'),
+  lastName: z.string().trim().optional(),
+  gender: z.string().min(1, 'Gender is required'),
+  dateOfBirth: z.string().min(1, 'Date of birth is required'),
+  parentFirstName: z.string().trim().min(1, "Mother/Father's First Name is required"),
+  parentLastName: z.string().trim().optional(),
+  email: z.string().trim().min(1, 'Email is required').email('Valid Email Address is required'),
+  pinCode: z.string().trim().min(1, 'Pin Code is required'),
+  country: z.string().min(1, 'Country is required'),
+  timeZone: z.string().min(1, 'Time Zone is required'),
+  phoneNumber: z.string().trim().min(1, 'Phone Number is required'),
 
-  firstName: z
-    .string()
-    .trim()
-    .min(2, 'First name must be at least 2 characters')
-    .max(50, 'First name cannot exceed 50 characters'),
-  lastName: z
-    .string()
-    .trim()
-    .min(2, 'Last name must be at least 2 characters')
-    .max(50, 'Last name cannot exceed 50 characters'),
-
-  marketingEmails: z.boolean(),
-  theme: z.enum(['light', 'dark', 'system']),
+  seriesName: z.string().optional(),
+  festival: z.string().optional(),
 });
 
 export type RegistrationData = z.infer<typeof registrationSchema>;

@@ -1,4 +1,3 @@
-import { Check } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -13,43 +12,43 @@ interface ProgressIndicatorProps {
 
 export function ProgressIndicator({ steps, currentStepIndex }: ProgressIndicatorProps) {
   return (
-    <nav aria-label="Progress" className="mb-8 overflow-hidden">
-      <ol role="list" className="flex items-center">
+    <nav aria-label="Progress" className="mb-12 flex justify-center">
+      <ol role="list" className="flex items-center space-x-2 sm:space-x-4">
         {steps.map((step, index) => {
           const isComplete = index < currentStepIndex;
           const isCurrent = index === currentStepIndex;
+          const isActive = isComplete || isCurrent;
 
           return (
-            <li 
-              key={step.id} 
-              className={cn("relative", index !== steps.length - 1 ? "pr-8 sm:pr-20" : "")}
-            >
-              <div className="flex items-center">
+            <li key={step.id} className="flex items-center">
+              <div className="flex items-center gap-2">
                 <div
                   className={cn(
-                    "flex h-8 w-8 items-center justify-center rounded-full border-[1.5px] text-sm font-medium transition-colors",
-                    isComplete ? "border-zinc-900 bg-zinc-900 text-white" :
-                    isCurrent ? "border-zinc-900 text-zinc-900 bg-white" :
-                    "border-stone-300 text-stone-400 bg-transparent"
+                    "flex h-7 w-7 items-center justify-center rounded-full border-[1.5px] text-xs font-semibold transition-colors",
+                    isActive
+                      ? "border-[#3c3899] bg-[#3c3899] text-white"
+                      : "border-stone-300 text-stone-500 bg-transparent"
                   )}
                   aria-current={isCurrent ? "step" : undefined}
                 >
-                  {isComplete ? <Check className="h-4 w-4" strokeWidth={3} /> : index + 1}
+                  {index + 1}
                 </div>
-                
-                {index !== steps.length - 1 && (
-                  <div
-                    className={cn(
-                      "absolute left-8 top-4 -ml-px h-[1.5px] w-[calc(100%-2rem)] sm:w-[calc(100%-2.5rem)] transition-colors",
-                      isComplete ? "bg-zinc-900" : "bg-stone-200"
-                    )}
-                    aria-hidden="true"
-                  />
-                )}
+                <span 
+                  className={cn(
+                    "text-sm font-medium hidden sm:block",
+                    isActive ? "text-[#3c3899]" : "text-stone-500"
+                  )}
+                >
+                  {step.title}
+                </span>
               </div>
-              <span className="absolute -bottom-6 text-xs font-medium text-stone-500 whitespace-nowrap">
-                {step.title}
-              </span>
+              
+              {index !== steps.length - 1 && (
+                <div
+                  className="ml-2 sm:ml-4 h-[1px] w-8 sm:w-16 bg-stone-300 transition-colors"
+                  aria-hidden="true"
+                />
+              )}
             </li>
           );
         })}

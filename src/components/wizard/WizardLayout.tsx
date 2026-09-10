@@ -19,7 +19,6 @@ export function WizardLayout<TFieldValues extends FieldValues>({
 }: ExtendedWizardProps<TFieldValues>) {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
   const stepHeaderRef = useRef<HTMLHeadingElement>(null);
 
   const methods = useForm<TFieldValues>({
@@ -28,7 +27,7 @@ export function WizardLayout<TFieldValues extends FieldValues>({
     mode: 'onChange',
   });
 
-  useFormPersistence(storageKey, methods);
+  useFormPersistence(storageKey, methods as never);
 
   useEffect(() => {
     if (stepHeaderRef.current) {
@@ -62,54 +61,51 @@ export function WizardLayout<TFieldValues extends FieldValues>({
   };
 
   return (
-    <div className="mx-auto w-full max-w-2xl rounded-xl bg-[#faf9f6] p-8 shadow-sm border border-stone-200">
+    <div className="mx-auto w-full max-w-4xl">
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-semibold text-zinc-900 mb-2">Let's get you started</h1>
+        <p className="text-stone-500">Enter the details to get going</p>
+      </div>
+
       <ProgressIndicator steps={steps} currentStepIndex={currentStepIndex} />
       
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(handleFinalSubmit)} className="mt-12 flex flex-col gap-6">
-          
-          <div className="mb-2">
-            <h2 
-              ref={stepHeaderRef} 
-              tabIndex={-1} 
-              className="text-xl font-medium text-zinc-900 outline-none rounded-sm focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-4 focus-visible:ring-offset-[#faf9f6]"
-            >
-              {currentStep.title}
-            </h2>
-            {currentStep.description && (
-              <p className="mt-1.5 text-sm text-stone-500">{currentStep.description}</p>
-            )}
-          </div>
+        <form onSubmit={methods.handleSubmit(handleFinalSubmit)} className="flex flex-col gap-6 w-full max-w-3xl mx-auto">
+          <h2 ref={stepHeaderRef} tabIndex={-1} className="sr-only">
+            {currentStep.title}
+          </h2>
 
-          <div className="min-h-[220px]">
+          <div className="min-h-[300px]">
             {currentStep.component}
           </div>
 
-          <div className="mt-6 flex justify-between pt-6 border-t border-stone-200">
-            <button
-              type="button"
-              onClick={handleBack}
-              disabled={currentStepIndex === 0 || isSubmitting}
-              className="px-4 py-2 text-sm font-medium text-zinc-700 bg-white border border-stone-300 rounded-md hover:bg-stone-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2"
-            >
-              Back
-            </button>
+          <div className="mt-8 flex justify-center gap-4">
+            {currentStepIndex > 0 && (
+              <button
+                type="button"
+                onClick={handleBack}
+                disabled={isSubmitting}
+                className="px-8 py-2.5 text-sm font-medium text-zinc-700 bg-white border border-stone-300 rounded-lg hover:bg-stone-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3c3899] focus-visible:ring-offset-2"
+              >
+                Back
+              </button>
+            )}
 
             {isLastStep ? (
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-5 py-2 text-sm font-medium text-white bg-zinc-900 rounded-md hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2"
+                className="px-8 py-2.5 text-sm font-medium text-white bg-[#3c3899] rounded-lg hover:bg-[#2d2a75] disabled:opacity-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3c3899] focus-visible:ring-offset-2"
               >
-                {isSubmitting ? 'Processing...' : 'Complete Registration'}
+                {isSubmitting ? 'Processing...' : 'Submit'}
               </button>
             ) : (
               <button
                 type="button"
                 onClick={handleNext}
-                className="px-5 py-2 text-sm font-medium text-white bg-zinc-900 rounded-md hover:bg-zinc-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2"
+                className="px-10 py-2.5 text-sm font-medium text-white bg-[#3c3899] rounded-lg hover:bg-[#2d2a75] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3c3899] focus-visible:ring-offset-2"
               >
-                Next Step
+                Next
               </button>
             )}
           </div>
