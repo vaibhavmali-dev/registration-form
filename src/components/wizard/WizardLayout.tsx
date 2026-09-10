@@ -20,6 +20,8 @@ export function WizardLayout<TFieldValues extends FieldValues>({
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const stepHeaderRef = useRef<HTMLHeadingElement>(null);
+  const [resetKey, setResetKey] = useState(0);
+  
 
   const methods = useForm<TFieldValues>({
     resolver: zodResolver(schema),
@@ -49,12 +51,15 @@ export function WizardLayout<TFieldValues extends FieldValues>({
     setCurrentStepIndex((prev) => Math.max(0, prev - 1));
   };
 
-  const handleFinalSubmit: SubmitHandler<TFieldValues> = async (data) => {
+const handleFinalSubmit: SubmitHandler<TFieldValues> = async (data) => {
     try {
       setIsSubmitting(true);
       await onComplete(data);
       clearStoredFormValues(storageKey);
-      methods.reset();
+      
+      methods.reset(defaultValues); 
+      setCurrentStepIndex(0);
+      setResetKey((prev) => prev + 1); 
     } finally {
       setIsSubmitting(false);
     }
@@ -69,8 +74,8 @@ export function WizardLayout<TFieldValues extends FieldValues>({
 
       <ProgressIndicator steps={steps} currentStepIndex={currentStepIndex} />
       
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(handleFinalSubmit)} className="flex flex-col gap-6 w-full max-w-3xl mx-auto">
+     <FormProvider {...methods}>
+        <form key={resetKey} onSubmit={methods.handleSubmit(handleFinalSubmit)} className="flex flex-col gap-6 w-full max-w-3xl mx-auto">
           <h2 ref={stepHeaderRef} tabIndex={-1} className="sr-only">
             {currentStep.title}
           </h2>
