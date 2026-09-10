@@ -13,8 +13,14 @@ export const registrationSchema = z.object({
   timeZone: z.string().min(1, 'Time Zone is required'),
   phoneNumber: z.string().trim().min(1, 'Phone Number is required'),
 
-  seriesName: z.string().optional(),
-  festival: z.string().optional(),
+  seriesName: z.string().min(1, 'Series Name is required'),
+  festival: z.string().min(1, 'Festival selection is required'),
+  eventDate: z.string().min(1, 'Date is required'),
+  eventTime: z.string().min(1, 'Time is required'),
+  showOtherWorkshops: z.boolean().default(false),
+  showOtherSeries: z.boolean().default(false),
+
+  subscribePosts: z.enum(['yes', 'no'], { required_error: 'Please indicate your subscription preference' }),
 });
 
 export type RegistrationData = z.infer<typeof registrationSchema>;
