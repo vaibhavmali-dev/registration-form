@@ -76,7 +76,14 @@ export function WizardLayout<TFieldValues extends FieldValues>({
           </h2>
 
           <div className="min-h-[300px]">
-            {currentStep.component}
+            {steps.map((step, index) => (
+              <div
+                key={step.id}
+                className={index === currentStepIndex ? 'block' : 'hidden'}
+              >
+                {step.component}
+              </div>
+            ))}
           </div>
 
           <div className="mt-8 flex justify-center gap-4">
