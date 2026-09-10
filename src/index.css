@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@theme {
+  --font-mono: "Google Sans Mono", monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-stone-100 text-zinc-900 antialiased;
+  }
+}
