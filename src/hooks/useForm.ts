@@ -55,22 +55,28 @@ export function useWizard<TFieldValues extends FieldValues>({
     setCurrentStepIndex((prev) => Math.max(0, prev - 1));
   };
 
-  const handleFinalSubmit: SubmitHandler<TFieldValues> = async (data) => {
-  try {
-    setIsSubmitting(true);
-    setSubmitError(null); 
-    await onComplete(data);
-    clearStoredFormValues(storageKey);
-    
-    methods.reset(defaultValues);
-    setCurrentStepIndex(0);
-    setResetKey((prev) => prev + 1);
-  } catch (error) {
-    setSubmitError(error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+ const handleFinalSubmit: SubmitHandler<TFieldValues> = async (data) => {
+    try {
+      setIsSubmitting(true);
+      setSubmitError(null);
+      
+      const apiPayload = {
+        ...data,
+        subscribePosts: data.subscribePosts === 'yes', 
+      };
+
+      await onComplete(apiPayload); 
+      clearStoredFormValues(storageKey);
+      
+      methods.reset(defaultValues);
+      setCurrentStepIndex(0);
+      setResetKey((prev) => prev + 1);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'An unexpected error occurred.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
