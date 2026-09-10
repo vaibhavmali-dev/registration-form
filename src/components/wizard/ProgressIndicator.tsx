@@ -26,7 +26,7 @@ export function ProgressIndicator({ steps, currentStepIndex }: ProgressIndicator
                   className={cn(
                     "flex h-7 w-7 items-center justify-center rounded-full border-[1.5px] text-xs font-semibold transition-colors",
                     isActive
-                      ? "border-[#3c3899] bg-[#3c3899] text-white"
+                      ? "border-[#3c3899] text-[#3c3899]"
                       : "border-stone-300 text-stone-500 bg-transparent"
                   )}
                   aria-current={isCurrent ? "step" : undefined}

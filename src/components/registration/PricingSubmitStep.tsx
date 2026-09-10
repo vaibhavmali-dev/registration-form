@@ -10,14 +10,14 @@ export function PricingSubmitStep() {
     <div className="flex flex-col items-center gap-10">
       <div className="w-full max-w-md bg-white rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.04)] p-8 text-left">
         <h3 className="text-lg font-semibold text-zinc-900 mb-1">Sub Total</h3>
-        <p className="text-sm text-stone-500 mb-6">Your sub total is as below</p>
+        <p className="text-xs text-stone-500 mb-2">Your sub total is as below</p>
         
         <div className="flex justify-between items-center py-2">
           <span className="text-sm font-medium text-zinc-800">Price</span>
           <span className="text-sm font-medium text-zinc-800">{currency}{amount}</span>
         </div>
         
-        <div className="border-t border-dashed border-stone-300 my-3"></div>
+        <div className="border-t border-dashed border-stone-300"></div>
         
         <div className="flex justify-between items-center py-2">
           <span className="text-base font-bold text-zinc-900">Total</span>
