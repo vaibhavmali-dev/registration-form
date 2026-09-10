@@ -1,69 +1,26 @@
-import { useState, useRef, useEffect } from 'react';
-import { useForm, FormProvider, type FieldValues, type DefaultValues, type SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { FormProvider, type FieldValues } from 'react-hook-form';
 import type { ZodType } from 'zod';
 import type { WizardProps } from '../../types/wizard';
 import { ProgressIndicator } from './ProgressIndicator';
-import { useFormPersistence, getStoredFormValues, clearStoredFormValues } from '../../hooks/useFormPersistence';
+import { useWizard } from '../../hooks/useForm';
 
 export interface ExtendedWizardProps<TFieldValues extends FieldValues> extends WizardProps<TFieldValues> {
   schema: ZodType<TFieldValues>;
 }
 
-export function WizardLayout<TFieldValues extends FieldValues>({
-  steps,
-  defaultValues,
-  storageKey,
-  schema,
-  onComplete,
-}: ExtendedWizardProps<TFieldValues>) {
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const stepHeaderRef = useRef<HTMLHeadingElement>(null);
-  const [resetKey, setResetKey] = useState(0);
-  
-
-  const methods = useForm<TFieldValues>({
-    resolver: zodResolver(schema),
-    defaultValues: getStoredFormValues(storageKey, defaultValues) as DefaultValues<TFieldValues>,
-    mode: 'onChange',
-  });
-
-  useFormPersistence(storageKey, methods as never);
-
-  useEffect(() => {
-    if (stepHeaderRef.current) {
-      stepHeaderRef.current.focus();
-    }
-  }, [currentStepIndex]);
-
-  const currentStep = steps[currentStepIndex];
-  const isLastStep = currentStepIndex === steps.length - 1;
-
-  const handleNext = async () => {
-    const isStepValid = await methods.trigger(currentStep.validationFields);
-    if (isStepValid) {
-      setCurrentStepIndex((prev) => prev + 1);
-    }
-  };
-
-  const handleBack = () => {
-    setCurrentStepIndex((prev) => Math.max(0, prev - 1));
-  };
-
-const handleFinalSubmit: SubmitHandler<TFieldValues> = async (data) => {
-    try {
-      setIsSubmitting(true);
-      await onComplete(data);
-      clearStoredFormValues(storageKey);
-      
-      methods.reset(defaultValues); 
-      setCurrentStepIndex(0);
-      setResetKey((prev) => prev + 1); 
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+export function WizardLayout<TFieldValues extends FieldValues>(props: ExtendedWizardProps<TFieldValues>) {
+  const {
+    methods,
+    currentStepIndex,
+    currentStep,
+    isLastStep,
+    isSubmitting,
+    resetKey,
+    stepHeaderRef,
+    handleNext,
+    handleBack,
+    handleFinalSubmit,
+  } = useWizard(props);
 
   return (
     <div className="mx-auto w-full max-w-4xl">
@@ -72,16 +29,20 @@ const handleFinalSubmit: SubmitHandler<TFieldValues> = async (data) => {
         <p className="text-stone-500">Enter the details to get going</p>
       </div>
 
-      <ProgressIndicator steps={steps} currentStepIndex={currentStepIndex} />
+      <ProgressIndicator steps={props.steps} currentStepIndex={currentStepIndex} />
       
-     <FormProvider {...methods}>
-        <form key={resetKey} onSubmit={methods.handleSubmit(handleFinalSubmit)} className="flex flex-col gap-6 w-full max-w-3xl mx-auto">
+      <FormProvider {...methods}>
+        <form 
+          key={resetKey} 
+          onSubmit={methods.handleSubmit(handleFinalSubmit)} 
+          className="flex flex-col gap-6 w-full max-w-3xl mx-auto"
+        >
           <h2 ref={stepHeaderRef} tabIndex={-1} className="sr-only">
             {currentStep.title}
           </h2>
 
           <div className="min-h-[300px]">
-            {steps.map((step, index) => (
+            {props.steps.map((step, index) => (
               <div
                 key={step.id}
                 className={index === currentStepIndex ? 'block' : 'hidden'}
