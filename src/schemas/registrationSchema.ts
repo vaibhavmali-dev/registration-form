@@ -20,7 +20,10 @@ export const registrationSchema = z.object({
   showOtherWorkshops: z.boolean().default(false),
   showOtherSeries: z.boolean().default(false),
 
-  subscribePosts: z.enum(['yes', 'no'], { required_error: 'Please indicate your subscription preference' }),
+ subscribePosts: z.enum(['yes', 'no'], { 
+    required_error: 'Please indicate your subscription preference',
+    invalid_type_error: 'Please indicate your subscription preference' 
+  }),
 });
 
 export type RegistrationData = z.infer<typeof registrationSchema>;
