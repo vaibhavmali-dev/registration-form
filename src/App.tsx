@@ -1,13 +1,8 @@
 import { WizardLayout } from './components/wizard/WizardLayout';
 import { GeneralDetailsStep } from './components/registration/GeneralDetailsStep';
+import { EventDetailsStep } from './components/registration/EventDetailsStep';
+import { PricingSubmitStep } from './components/registration/PricingSubmitStep';
 import { registrationSchema, type RegistrationData } from './schemas/registrationSchema';
-
-function EventDetailsStepStub() {
-  return <div className="text-center p-8 text-stone-500">Event Details Content (Phase 5)</div>;
-}
-function PricingStepStub() {
-  return <div className="text-center p-8 text-stone-500">Pricing and Submit Content (Phase 5)</div>;
-}
 
 const wizardSteps = [
   {
@@ -23,14 +18,14 @@ const wizardSteps = [
   {
     id: 'event',
     title: 'Event Details',
-    component: <EventDetailsStepStub />,
-    validationFields: ['seriesName', 'festival'] as const,
+    component: <EventDetailsStep />,
+    validationFields: ['seriesName', 'festival', 'eventDate', 'eventTime'] as const,
   },
   {
     id: 'pricing',
     title: 'Pricing and Submit',
-    component: <PricingStepStub />,
-    validationFields: [] as const,
+    component: <PricingSubmitStep />,
+    validationFields: ['subscribePosts'] as const,
   },
 ];
 
@@ -48,6 +43,11 @@ const initialData: RegistrationData = {
   phoneNumber: '',
   seriesName: '',
   festival: '',
+  eventDate: '',
+  eventTime: '',
+  showOtherWorkshops: false,
+  showOtherSeries: false,
+  subscribePosts: undefined as unknown as 'yes' | 'no',
 };
 
 export default function App() {
