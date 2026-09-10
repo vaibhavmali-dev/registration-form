@@ -2,6 +2,7 @@ import { useFormContext } from 'react-hook-form';
 import { FieldWrapper } from '../ui/FieldWrapper';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
+import { REGISTRATION_CONFIG } from '../../config/registration';
 import type { RegistrationData } from '../../schemas/registrationSchema';
 
 export function GeneralDetailsStep() {
@@ -19,11 +20,10 @@ export function GeneralDetailsStep() {
 
       <FieldWrapper label="Gender*" error={errors.gender?.message}>
         <Select {...register('gender')} aria-invalid={!!errors.gender}>
-        <option value="" disabled>Select</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
-          <option value="prefer_not_to_say">Prefer not to say</option>
+          <option value="" disabled>Select</option>
+          {REGISTRATION_CONFIG.options.genders.map((gender) => (
+            <option key={gender.value} value={gender.value}>{gender.label}</option>
+          ))}
         </Select>
       </FieldWrapper>
 
@@ -52,18 +52,18 @@ export function GeneralDetailsStep() {
       <FieldWrapper label="Country*" error={errors.country?.message}>
         <Select {...register('country')} aria-invalid={!!errors.country}>
           <option value="" disabled>Select</option>
-          <option value="IN">India</option>
-          <option value="US">United States</option>
-          <option value="UK">United Kingdom</option>
+          {REGISTRATION_CONFIG.options.countries.map((country) => (
+            <option key={country.value} value={country.value}>{country.label}</option>
+          ))}
         </Select>
       </FieldWrapper>
 
       <FieldWrapper label="Time Zone*" error={errors.timeZone?.message}>
         <Select {...register('timeZone')} aria-invalid={!!errors.timeZone}>
           <option value="" disabled>Select</option>
-          <option value="IST">IST - Indian Standard Time - GMT +5:30</option>
-          <option value="PST">PST - Pacific Standard Time - GMT -8:00</option>
-          <option value="EST">EST - Eastern Standard Time - GMT -5:00</option>
+          {REGISTRATION_CONFIG.options.timeZones.map((tz) => (
+            <option key={tz.value} value={tz.value}>{tz.label}</option>
+          ))}
         </Select>
       </FieldWrapper>
 

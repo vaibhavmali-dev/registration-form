@@ -1,9 +1,9 @@
 import { WizardLayout } from './components/wizard/WizardLayout';
-import type { DefaultValues } from 'react-hook-form';
 import { GeneralDetailsStep } from './components/registration/GeneralDetailsStep';
 import { EventDetailsStep } from './components/registration/EventDetailsStep';
 import { PricingSubmitStep } from './components/registration/PricingSubmitStep';
-import { registrationSchema, type RegistrationData } from './schemas/registrationSchema';
+import { registrationSchema } from './schemas/registrationSchema';
+import { initialRegistrationData } from './config/registration';
 
 const wizardSteps = [
   {
@@ -29,34 +29,14 @@ const wizardSteps = [
     validationFields: ['subscribePosts'] as const,
   },
 ];
-const initialData: DefaultValues<RegistrationData> = {
-  firstName: '',
-  lastName: '',
-  gender: '',
-  dateOfBirth: '',
-  parentFirstName: '',
-  parentLastName: '',
-  email: '',
-  pinCode: '',
-  country: '',
-  timeZone: '',
-  phoneNumber: '',
-  seriesName: '',
-  festival: '',
-  eventDate: '',
-  eventTime: '',
-  showOtherWorkshops: false,
-  showOtherSeries: false,
-  subscribePosts: undefined, 
-};
 
 export default function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#eff3ff] via-[#ffffff] to-[#fff5ea] p-4 sm:p-12 font-sans selection:bg-[#3c3899] selection:text-white">
       <WizardLayout
         steps={wizardSteps}
-        defaultValues={initialData}
-        storageKey="registration-draft-v1" 
+        defaultValues={initialRegistrationData} 
+        storageKey="registration-draft-v1"
         schema={registrationSchema}
         onComplete={async (data) => {
           await new Promise((resolve) => setTimeout(resolve, 1500));

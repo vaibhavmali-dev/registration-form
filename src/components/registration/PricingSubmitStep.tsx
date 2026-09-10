@@ -1,8 +1,10 @@
 import { useFormContext } from 'react-hook-form';
+import { REGISTRATION_CONFIG } from '../../config/registration';
 import type { RegistrationData } from '../../schemas/registrationSchema';
 
 export function PricingSubmitStep() {
   const { register, formState: { errors } } = useFormContext<RegistrationData>();
+  const { currency, amount } = REGISTRATION_CONFIG.pricing;
 
   return (
     <div className="flex flex-col items-center gap-10">
@@ -12,14 +14,14 @@ export function PricingSubmitStep() {
         
         <div className="flex justify-between items-center py-2">
           <span className="text-sm font-medium text-zinc-800">Price</span>
-          <span className="text-sm font-medium text-zinc-800">₹1000</span>
+          <span className="text-sm font-medium text-zinc-800">{currency}{amount}</span>
         </div>
         
         <div className="border-t border-dashed border-stone-300 my-3"></div>
         
         <div className="flex justify-between items-center py-2">
           <span className="text-base font-bold text-zinc-900">Total</span>
-          <span className="text-base font-bold text-[#2d9a5b]">₹1000</span>
+          <span className="text-base font-bold text-[#2d9a5b]">{currency}{amount}</span>
         </div>
       </div>
 
