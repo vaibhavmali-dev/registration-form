@@ -37,7 +37,7 @@ export function EventDetailsStep() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
         <FieldWrapper label="Date" error={errors.eventDate?.message}>
           <Select {...register('eventDate')} aria-invalid={!!errors.eventDate}>
-            <option value="">Select Date</option>
+            <option value="" disabled>Select Date</option>
             <option value="2020-10-20">20 October 2020</option>
             <option value="2020-11-14">14 November 2020</option>
           </Select>
@@ -45,7 +45,7 @@ export function EventDetailsStep() {
 
         <FieldWrapper label="Time" error={errors.eventTime?.message}>
           <Select {...register('eventTime')} aria-invalid={!!errors.eventTime}>
-            <option value="">Select Time</option>
+           <option value="" disabled>Select Time</option>
             <option value="12:30">12:30 PM IST</option>
             <option value="18:00">06:00 PM IST</option>
           </Select>

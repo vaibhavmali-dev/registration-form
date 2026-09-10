@@ -23,6 +23,7 @@ export function useWizard<TFieldValues extends FieldValues>({
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resetKey, setResetKey] = useState(0);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   
   const stepHeaderRef = useRef<HTMLHeadingElement>(null);
 
@@ -55,16 +56,28 @@ export function useWizard<TFieldValues extends FieldValues>({
   };
 
   const handleFinalSubmit: SubmitHandler<TFieldValues> = async (data) => {
-    try {
-      setIsSubmitting(true);
-      await onComplete(data);
-      clearStoredFormValues(storageKey);
-      
-      methods.reset(defaultValues);
-      setCurrentStepIndex(0);
-      setResetKey((prev) => prev + 1);
-    } finally {
-      setIsSubmitting(false);
+  try {
+    setIsSubmitting(true);
+    setSubmitError(null); 
+    await onComplete(data);
+    clearStoredFormValues(storageKey);
+    
+    methods.reset(defaultValues);
+    setCurrentStepIndex(0);
+    setResetKey((prev) => prev + 1);
+  } catch (error) {
+    setSubmitError(error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isLastStep) {
+      await handleNext();
+    } else {
+      await methods.handleSubmit(handleFinalSubmit)(e);
     }
   };
 
@@ -76,8 +89,8 @@ export function useWizard<TFieldValues extends FieldValues>({
     isSubmitting,
     resetKey,
     stepHeaderRef,
-    handleNext,
     handleBack,
-    handleFinalSubmit,
+    handleFormSubmit,
+    submitError,
   };
 }

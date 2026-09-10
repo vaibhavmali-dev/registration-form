@@ -19,7 +19,7 @@ export function GeneralDetailsStep() {
 
       <FieldWrapper label="Gender*" error={errors.gender?.message}>
         <Select {...register('gender')} aria-invalid={!!errors.gender}>
-          <option value="">Select</option>
+        <option value="" disabled>Select</option>
           <option value="male">Male</option>
           <option value="female">Female</option>
           <option value="other">Other</option>
@@ -51,7 +51,7 @@ export function GeneralDetailsStep() {
 
       <FieldWrapper label="Country*" error={errors.country?.message}>
         <Select {...register('country')} aria-invalid={!!errors.country}>
-          <option value="">Select</option>
+          <option value="" disabled>Select</option>
           <option value="IN">India</option>
           <option value="US">United States</option>
           <option value="UK">United Kingdom</option>
@@ -60,7 +60,7 @@ export function GeneralDetailsStep() {
 
       <FieldWrapper label="Time Zone*" error={errors.timeZone?.message}>
         <Select {...register('timeZone')} aria-invalid={!!errors.timeZone}>
-          <option value="">Select</option>
+          <option value="" disabled>Select</option>
           <option value="IST">IST - Indian Standard Time - GMT +5:30</option>
           <option value="PST">PST - Pacific Standard Time - GMT -8:00</option>
           <option value="EST">EST - Eastern Standard Time - GMT -5:00</option>

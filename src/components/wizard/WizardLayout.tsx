@@ -17,9 +17,9 @@ export function WizardLayout<TFieldValues extends FieldValues>(props: ExtendedWi
     isSubmitting,
     resetKey,
     stepHeaderRef,
-    handleNext,
     handleBack,
-    handleFinalSubmit,
+    handleFormSubmit,
+    submitError,
   } = useWizard(props);
 
   return (
@@ -34,7 +34,7 @@ export function WizardLayout<TFieldValues extends FieldValues>(props: ExtendedWi
       <FormProvider {...methods}>
         <form 
           key={resetKey} 
-          onSubmit={methods.handleSubmit(handleFinalSubmit)} 
+          onSubmit={handleFormSubmit} 
           className="flex flex-col gap-6 w-full max-w-3xl mx-auto"
         >
           <h2 ref={stepHeaderRef} tabIndex={-1} className="sr-only">
@@ -53,6 +53,12 @@ export function WizardLayout<TFieldValues extends FieldValues>(props: ExtendedWi
           </div>
 
           <div className="mt-8 flex justify-center gap-4">
+            {submitError && (
+      <div className="text-sm font-medium text-red-600 bg-red-50 py-2 px-4 rounded-md border border-red-200">
+        {submitError}
+      </div>
+    )}
+
             {currentStepIndex > 0 && (
               <button
                 type="button"
@@ -74,8 +80,7 @@ export function WizardLayout<TFieldValues extends FieldValues>(props: ExtendedWi
               </button>
             ) : (
               <button
-                type="button"
-                onClick={handleNext}
+                type="submit"
                 className="px-10 py-2.5 text-sm font-medium text-white bg-[#3c3899] rounded-lg hover:bg-[#2d2a75] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3c3899] focus-visible:ring-offset-2"
               >
                 Next

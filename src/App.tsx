@@ -1,4 +1,5 @@
 import { WizardLayout } from './components/wizard/WizardLayout';
+import type { DefaultValues } from 'react-hook-form';
 import { GeneralDetailsStep } from './components/registration/GeneralDetailsStep';
 import { EventDetailsStep } from './components/registration/EventDetailsStep';
 import { PricingSubmitStep } from './components/registration/PricingSubmitStep';
@@ -28,8 +29,7 @@ const wizardSteps = [
     validationFields: ['subscribePosts'] as const,
   },
 ];
-
-const initialData: RegistrationData = {
+const initialData: DefaultValues<RegistrationData> = {
   firstName: '',
   lastName: '',
   gender: '',
@@ -47,7 +47,7 @@ const initialData: RegistrationData = {
   eventTime: '',
   showOtherWorkshops: false,
   showOtherSeries: false,
-  subscribePosts: undefined as unknown as 'yes' | 'no',
+  subscribePosts: undefined, 
 };
 
 export default function App() {
@@ -56,7 +56,7 @@ export default function App() {
       <WizardLayout
         steps={wizardSteps}
         defaultValues={initialData}
-        storageKey="registration-draft"
+        storageKey="registration-draft-v1" 
         schema={registrationSchema}
         onComplete={async (data) => {
           await new Promise((resolve) => setTimeout(resolve, 1500));
